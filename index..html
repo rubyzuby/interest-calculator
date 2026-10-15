@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Interest Calculator</h1>
+            <p>Simple & Compound Interest</p>
+        </div>
+
+        <div class="form-section">
+            <div class="input-group">
+                <label for="principal">Principal Amount</label>
+                <input type="number" id="principal" placeholder="e.g. 10000" min="0" step="any">
+            </div>
+
+            <div class="input-group">
+                <label for="rate">Annual Interest Rate (%)</label>
+                <input type="number" id="rate" placeholder="e.g. 5" min="0" step="any">
+            </div>
+
+            <div class="input-group">
+                <label for="time">Time (Years)</label>
+                <input type="number" id="time" placeholder="e.g. 3" min="0" step="any">
+            </div>
+
+            <button class="btn" onclick="submitValues()">Calculate Interest</button>
+
+            <div class="results" id="results">
+                <div class="section-title">Simple Interest</div>
+                <div class="result-card">
+                    <span class="result-label">Interest Earned</span>
+                    <span class="result-value" id="interestOutput">—</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Total Amount</span>
+                    <span class="result-value highlight" id="totalAmountOutput">—</span>
+                </div>
+
+                <div class="section-title" style="margin-top: 24px;">Compound Interest</div>
+                <div class="result-card">
+                    <span class="result-label">Interest Earned</span>
+                    <span class="result-value" id="compoundInterestOutput">—</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Total Amount</span>
+                    <span class="result-value highlight" id="totalAmountCompoundOutput">—</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitValues() {
+            const principal = parseFloat(document.getElementById("principal").value);
+            const rate = parseFloat(document.getElementById("rate").value);
+            const time = parseFloat(document.getElementById("time").value);
+
+            
+            if (isNaN(principal) || isNaN(rate) || isNaN(time) || principal <= 0 || rate < 0 || time <= 0) {
+                alert("Please enter valid positive numbers for Principal, Rate, and Time.");
+                return;
+            }
+
+            
+            const simpleInterestValue = (principal * rate * time) / 100;
+            const totalValue = principal + simpleInterestValue;
+
+            const compoundInterestValue = (principal * (1 + (rate / (100 * time))) ** (time * rate)) - principal;
+            const totalCompoundValue = principal * (1 + (rate / (100 * time))) ** (time * rate);
+
+            // Format to 2 decimal places
+            document.getElementById("interestOutput").textContent = simpleInterestValue.toFixed(2);
+            document.getElementById("totalAmountOutput").textContent = totalValue.toFixed(2);
+            document.getElementById("compoundInterestOutput").textContent = compoundInterestValue.toFixed(2);
+            document.getElementById("totalAmountCompoundOutput").textContent = totalCompoundValue.toFixed(2);
+
+            // Show results with animation
+            const results = document.getElementById("results");
+            results.classList.add("show");
+
+            document.getElementById("principal").value = "";
+            document.getElementById("rate").value = "";
+            document.getElementById("time").value = "";
+        }
+
+        // Allow Enter key to trigger calculation
+        document.querySelectorAll("input").forEach(input => {
+            input.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    submitValues();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
